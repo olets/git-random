@@ -7,8 +7,11 @@
 # Copyright (©) 2018-present Henry Bley-Vroman
 
 __git_random_main() {
+	local -i stash
 	local guid
 	local file_path
+
+	stash=0
 
 	# the following is BSD/Mac-friendly
 	# the `env LC_CTYPE=C` can be dropped on other systems
@@ -21,6 +24,11 @@ __git_random_main() {
 
 	file_path="${guid}.txt"
 
+	if [[ -n $(git diff --cached --name-only) ]]; then
+		stash=1
+		git stash --staged
+	fi
+
 	touch "$file_path"
 
 	print "$guid" >> "$file_path"
@@ -28,6 +36,10 @@ __git_random_main() {
 	git add "$file_path"
 
 	git commit -m "Random commit (${guid})"
+
+	if (( stash )); then
+		git stash pop
+	fi
 }
 
 __git_random_main()
