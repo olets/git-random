@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# git-random
+# v1.0.0-beta.1
+# May 2 2018
+# https://github.com/olets/git-random
+# Copyright (©) 2018-present Henry Bley-Vroman
+
+# the following is BSD/Mac-friendly
+# the `env LC_CTYPE=C` can be dropped on other systems
+
+random_string=$(env LC_CTYPE=C tr -dc '[:alnum:]' < /dev/urandom | dd bs=4 count=8 2>/dev/null)
+
+if [ -z "$random_string" ]; then
+	printf "Error generating random string. Exiting\n"
+	exit 1
+fi
+
+echo "$random_string" >> "$random_string".txt
+git add "$random_string".txt
+git commit -m "Random commit (${random_string})"
+	
