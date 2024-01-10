@@ -15,7 +15,7 @@ __git_random_commit() {
 	guid=$(env LC_CTYPE=C tr -dc '[:alnum:]' < /dev/urandom | dd bs=4 count=8 2>/dev/null)
 
 	if [[ -z "$guid" ]]; then
-		printf "git-random: Error generating random string. Exiting\n"
+		'builtin' 'printf' "git-random: Error generating random string. Exiting\n"
 		exit 1
 	fi
 
@@ -23,13 +23,13 @@ __git_random_commit() {
 
 	touch "$file_path"
 
-	printf "%s\n" "$guid" >> "$file_path"
+	'builtin' 'printf' "%s\n" "$guid" >> "$file_path"
 
-	git add "$file_path"
+	'command' 'git' add "$file_path"
 
-	printf "git-random: Adding the line $guid to the file $file_path and committing the change.\n"
+	'builtin' 'printf' "git-random: Adding the line $guid to the file $file_path and committing the change.\n"
 
-	git commit -m "Random commit (${guid})"
+	'command' 'git' commit -m "Random commit (${guid})"
 }
 
 __git_random_main() {
@@ -45,8 +45,8 @@ __git_random_main() {
 	fi
 
 	if [[ -n $(git diff --cached --name-only) ]]; then
-		printf "git-random: stashing your staged changes.\n"
-		git stash --staged
+		'builtin' 'printf' "git-random: stashing your staged changes.\n"
+		'command' 'git' stash --staged
 		stash=1
 	fi
 
@@ -54,19 +54,19 @@ __git_random_main() {
 		__git_random_commit;
 
 		if (( "$i" > 1 )); then
-			printf "\n"
+			'builtin' 'printf' "\n"
 		fi
 
 		(( i-- ))
 	done
 
 	if (( stash )); then
-		printf "\ngit-random: reinstating stashed staged changes.\n"
+		'builtin' 'printf' "\ngit-random: reinstating stashed staged changes.\n"
 
-		git stash pop --index --quiet
+		'command' 'git' stash pop --index --quiet
 
 		if (( $? )); then
-			printf "git-random: There was a problem reinstating restoring your stashed changes. They are in Git's stash{0}.\n"
+			'builtin' 'printf' "git-random: There was a problem reinstating restoring your stashed changes. They are in Git's stash{0}.\n"
 			return 1
 		fi
 	fi
