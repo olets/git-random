@@ -6,17 +6,28 @@
 # https://github.com/olets/git-random
 # Copyright (©) 2018-present Henry Bley-Vroman
 
-# the following is BSD/Mac-friendly
-# the `env LC_CTYPE=C` can be dropped on other systems
+__git_random_main() {
+	local guid
+	local file_path
 
-random_string=$(env LC_CTYPE=C tr -dc '[:alnum:]' < /dev/urandom | dd bs=4 count=8 2>/dev/null)
+	# the following is BSD/Mac-friendly
+	# the `env LC_CTYPE=C` can be dropped on other systems
+	guid=$(env LC_CTYPE=C tr -dc '[:alnum:]' < /dev/urandom | dd bs=4 count=8 2>/dev/null)
 
-if [ -z "$random_string" ]; then
-	printf "Error generating random string. Exiting\n"
-	exit 1
-fi
+	if [[ -z "$guid" ]]; then
+		printf "Error generating random string. Exiting\n"
+		exit 1
+	fi
 
-echo "$random_string" >> "$random_string".txt
-git add "$random_string".txt
-git commit -m "Random commit (${random_string})"
-	
+	file_path="${guid}.txt"
+
+	touch "$file_path"
+
+	print "$guid" >> "$file_path"
+
+	git add "$file_path"
+
+	git commit -m "Random commit (${guid})"
+}
+
+__git_random_main()
