@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # git-random
-# v1.0.0-beta.1
-# May 2 2018
+# v1.0.0
+# January 10 2023
 # https://github.com/olets/git-random
 # Copyright (©) 2018-present Henry Bley-Vroman
 
@@ -33,7 +33,7 @@ __git_random_commit() {
 }
 
 __git_random_main() {
-	local version="1.0.0-beta.1"
+	local version="1.0.0"
 	
 	local -i i=
 	local -i stash=
