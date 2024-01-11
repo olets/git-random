@@ -33,12 +33,20 @@ __git_random_commit() {
 }
 
 __git_random_main() {
+	local version="1.0.0-beta.1"
+	
 	local -i i=
 	local -i stash=
-	local version="1.0.0-beta.1"
+	local source_dir
+
+	source_dir=$(dirname -- "${BASH_SOURCE[0]}")
 
 	while (( $# )); do
 		case $1 in
+			help)
+				'command' 'git' random --help 2>/dev/null || 'command' 'man' ${source_dir}/man/man1/git-random.1
+				return
+				;;
 			--version|\
 			-v)
 				'builtin' 'printf' "%s\n" "$version"
