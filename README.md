@@ -73,9 +73,9 @@ Show the current version:
 git random (--version | -v)
 ```
 
-<!-- ## Changelog
+## Changelog
 
-See the [CHANGELOG](CHANGELOG.md) file. -->
+See the [CHANGELOG](CHANGELOG.md) file.
 
 ## Contributing
 
