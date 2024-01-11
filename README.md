@@ -10,8 +10,28 @@ Add to a directory in your $PATH.
 
 ## Usage
 
+Generate one random commit:
+
 ```shell
 git random
+```
+
+Generate multiple random commits:
+
+```shell
+git random <count> # e.g. `git random 3`
+```
+
+Show the manpage:
+
+```
+git random (help | --help)
+```
+
+Show the current version:
+
+```
+git random (--version | -v)
 ```
 
 <!-- ## Changelog
