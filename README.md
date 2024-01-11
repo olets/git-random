@@ -2,26 +2,26 @@
 
 **git-random** is a tool for helping with Git experiments. Build commit history quickly by creating and committing randomly-named files.
 
-&nbsp;
-
-## Example
-
-```shell
-git branch A
-git random # creates one commit
-git switch -c B
-git random 2 # creates two commits
-git switch A
-git random 2 # creates two commits
-```
-
-gives you
+Say you want to try some Git commands on this scenario:
 
 ```
 • < • < A
   \
     • < B
 ```
+
+Get there with
+
+```shell
+git branch A
+git random
+git switch -c B
+git random 2
+git switch A
+git random 2
+```
+
+&nbsp;
 
 ## Installation
 
@@ -90,6 +90,51 @@ Show the current version:
 
 ```
 git random (--version | -v)
+```
+
+## Example
+
+I keep a dedicated Git repo for experiments and demos
+
+```shell
+% git init gitscratchpad
+```
+
+and switch to it as needed
+
+```shell
+# "Am I right to think that in `git-rebase`'s `--onto` form `branch` is optional defaulting to `git branch --show-current`?
+% cd ../gitscratchpad
+% git commit --allow-empty -m "initial (empty)"
+% git switch -c upstream
+% git random
+% git switch -c newbase
+% git random
+% git switch -
+% git random
+% git switch -c branch
+% git random
+% git log --graph --pretty=format:'%h -%d %s%n' --abbrev-commit --branches
+* 056196f - (HEAD -> branch) Random commit (GooICwudCQ8u9ViE9F2CgVD7af91xsFo)
+|
+* 7590c44 - (upstream) Random commit (P71Ju20c6lZBafQFjR5wzN10OpOAHxHS)
+|
+| * 6fe654b - (newbase) Random commit (EoQ4uX9bNlOcvIsdBV5ZTLLOMQOEGh17)
+|/
+|
+* d32c37f - Random commit (G38cUNWk9aToTZlIrxssNYP63KqqAnmC)
+% git rebase --onto newbase upstream
+% git log --graph --pretty=format:'%h -%d %s%n' --abbrev-commit --branches
+* 08a0a94 - (HEAD -> branch) Random commit (ICwudCQ8u9ViE9F2CgVD7af91xsFoGoo)
+|
+* 6fe654b - (newbase) Random commit (EoQ4uX9bNlOcvIsdBV5ZTLLOMQOEGh17)
+|
+| * 7590c44 - (upstream) Random commit (SP71Ju20c6lZBafQFjR5wzN10OpOAHxH)
+|/
+|
+* d32c37f -  Random commit (G38cUNWk9aToTZlIrxssNYP63KqqAnmC)
+# "Yes. Okay back to work"
+% cd -
 ```
 
 ## Changelog
