@@ -1,4 +1,4 @@
-# git-random <!--![GitHub release (latest by date)](https://img.shields.io/github/v/release/olets/git-random) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/olets/git-random/latest)-->
+# git-random ![GitHub release (latest by date)](https://img.shields.io/github/v/release/olets/git-random) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/olets/git-random/latest)
 
 **git-random** is a tool for helping with Git experiments. Build commit history quickly by creating and committing a randomly-named file.
 
