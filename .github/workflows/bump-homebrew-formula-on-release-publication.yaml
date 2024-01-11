@@ -1,0 +1,22 @@
+name: Bump Homebrew Formula on Release Publication
+
+on:
+  release:
+    types: [published]
+jobs:
+  homebrew:
+    name: Bump Homebrew formula
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mislav/bump-homebrew-formula-action@v3
+        with:
+          formula-name: git-random
+          formula-path: git-random.rb
+          homebrew-tap: olets/homebrew-tap
+          commit-message: |
+            feat({{formulaName}}): publish {{version}}
+
+            Created by https://github.com/mislav/bump-homebrew-formula-action
+            via the https://github.com/olets/git-random "bump-homebrew-formula-on-release-publication" workflow
+        env:
+          COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
