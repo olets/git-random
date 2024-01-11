@@ -35,6 +35,17 @@ __git_random_commit() {
 __git_random_main() {
 	local -i i=
 	local -i stash=
+	local version="1.0.0-beta.1"
+
+	while (( $# )); do
+		case $1 in
+			--version|\
+			-v)
+				'builtin' 'printf' "%s\n" "$version"
+				return
+				;;
+		esac
+	done
 
 	if (( $# )); then
 		i="$1"
