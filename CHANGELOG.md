@@ -1,3 +1,10 @@
+# [v1.0.1](https://github.com/olets/git-random/compare/v1.0.0...v1.0.1) (2024-01-11)
+
+- Polishes output ([b559a57](https://github.com/olets/git-random/commit/b559a57f1ef4b47f1bc69132542da4d1f46adfe6))
+- Updates docs
+
+
+
 # [v1.0.0](https://github.com/olets/git-random/compare/v1.0.0-beta.2) (2024-01-10)
 
 
