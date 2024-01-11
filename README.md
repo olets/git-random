@@ -87,6 +87,10 @@ Check the [Issues](https://github.com/olets/git-random/issues) to see if your to
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
 
+## Acknowledgments
+
+Inspired by seeing Lorna Jane Mitchell do something similar in her talk ["Advanced GIT for Developers"](https://www.youtube.com/watch?v=duqBHik7nRo). I realized much later that she was using Matthew J. McCullough's [generaterandomchanges](https://github.com/matthewmccullough/scripts/blob/master/generaterandomchanges).
+
 ## License
 
 <a href="https://www.github.com/olets/git-random">git-random</a> by <a href="https://www.github.com/olets">Henry Bley-Vroman</a> is licensed under a license which is the unmodified text of <a href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> and the unmodified text of a <a href="https://firstdonoharm.dev/build?modules=eco,extr,media,mil,sv,usta">Hippocratic License 3</a>. It is not affiliated with Creative Commons or the Organization for Ethical Source.
