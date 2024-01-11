@@ -7,6 +7,16 @@
 ## Installation
 
 Add to a directory in your $PATH.
+### With a shell plugin manager
+
+zsh users can install git-random with a zsh plugin manager. Each has their own way of doing things. See your package manager's documentation or the [zsh plugin manager plugin installation procedures gist](https://gist.github.com/olets/06009589d7887617e061481e22cf5a4a).
+
+After adding the plugin to the manager, it will be available in all new terminals. To use it in an already-open terminal, restart zsh in that terminal:
+
+```shell
+exec zsh
+```
+
 ### Manual
 
 1. Download [the latest `git-random` binary](https://github.com/olets/git-random/releases/latest) or clone the [repo](https://github.com/olets/git-random).
