@@ -1,8 +1,27 @@
 # git-random ![GitHub release (latest by date)](https://img.shields.io/github/v/release/olets/git-random) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/olets/git-random/latest)
 
-**git-random** is a tool for helping with Git experiments. Build commit history quickly by creating and committing a randomly-named file.
+**git-random** is a tool for helping with Git experiments. Build commit history quickly by creating and committing randomly-named files.
 
 &nbsp;
+
+## Example
+
+```shell
+git branch A
+git random # creates one commit
+git switch -c B
+git random 2 # creates two commits
+git switch A
+git random 2 # creates two commits
+```
+
+gives you
+
+```
+• < • < A
+  \
+    • < B
+```
 
 ## Installation
 
