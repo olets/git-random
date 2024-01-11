@@ -80,6 +80,7 @@ __git_random_main() {
 	if [[ -n $(git diff --cached --name-only) ]]; then
 		'builtin' 'printf' "git-random: stashing your staged changes.\n"
 		'command' 'git' stash --staged
+		'builtin' 'printf' "\n"
 		stash=1
 	fi
 
