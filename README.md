@@ -7,6 +7,20 @@
 ## Installation
 
 Add to a directory in your $PATH.
+### Manual
+
+1. Download [the latest `git-random` binary](https://github.com/olets/git-random/releases/latest) or clone the [repo](https://github.com/olets/git-random).
+1. Add the `git-random` directory to your path. The below examples suppose the `git-random` directory is at `~/git-random`— _**modify that to use the real location**_
+    ```shell
+    # .bashrc
+    PATH=~/git-random:"$PATH"
+
+    # .zshrc
+    PATH=~/git-random:$PATH
+
+    # ~/.config/fish/config.fish
+    fish_add_path ~/git-random
+    ```
 
 ## Usage
 
