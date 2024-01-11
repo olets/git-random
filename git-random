@@ -52,11 +52,25 @@ __git_random_main() {
 				'builtin' 'printf' "%s\n" "$version"
 				return
 				;;
+			-*)
+				'builtin' 'printf' "Unsupported option %s\n" "$1"
+				return
+				;;
+			*[!0-9]*)
+				# not an integer
+				'builtin' 'printf' "Not a valid <count>: %s\n" "$1"
+				return
+				;;
+			*)
+				i="$1"
+				shift
+				break
 		esac
 	done
 
-	if (( $# )); then
-		i="$1"
+	if [[ -n "$*" ]]; then
+		'builtin' 'printf' "Too many arguments\n"
+		return
 	fi
 
 	if (( "$i" < 1 )); then
