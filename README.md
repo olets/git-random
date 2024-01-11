@@ -68,25 +68,62 @@ Users of shells **other than zsh** may be able to install git-random as a plugin
 
 ## Usage
 
-Generate one random commit:
+### One commit
 
 ```shell
 git random
 ```
 
-Generate multiple random commits:
+Real output is more verbose, and includes the `git commit` logs:
+
+```
+% git random
+git-random: Adding the line K94gQshXDNsx4ZZfSnDiE0ZftoCivFQ3 to the file K94gQshXDNsx4ZZfSnDiE0ZftoCivFQ3.txt and committing the change.
+Git activity log: commit logged
+[main 918f55b] Random commit (K94gQshXDNsx4ZZfSnDiE0ZftoCivFQ3)
+ 1 file changed, 1 insertion(+)
+ create mode 100644 K94gQshXDNsx4ZZfSnDiE0ZftoCivFQ3.txt
+```
+
+It is safe to have staged changes before running `git random`
+
+```shell
+% git status
+On branch main
+nothing to commit, working tree clean
+% touch a-new-file
+% git add a-new-file
+% git random
+git-random: stashing your staged changes.
+Saved working directory and index state WIP on main: 55b918f Random commit (K94gQshXDNsx4ZZfSnDiE0ZftoCivFQ3)
+
+git-random: Adding the line K94gQshXDNsx4ZZfSnDiE0ZftoCivFQ3 to the file K94gQshXDNsx4ZZfSnDiE0ZftoCivFQ3.txt and committing the change.
+Git activity log: commit logged
+[main bf92f4b] Random commit (K94gQshXDNsx4ZZfSnDiE0ZftoCivFQ3)
+ 1 file changed, 1 insertion(+)
+ create mode 100644 K94gQshXDNsx4ZZfSnDiE0ZftoCivFQ3.txt
+
+git-random: reinstating stashed staged changes.
+% git status
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	new file:   a-new-file
+```
+
+### Multiple commits
 
 ```shell
 git random <count> # e.g. `git random 3`
 ```
 
-Show the manpage:
+### Show the manpage
 
 ```
 git random (help | --help)
 ```
 
-Show the current version:
+### Show the current version
 
 ```
 git random (--version | -v)
