@@ -43,6 +43,16 @@ __git_random_main() {
 
 	while (( $# )); do
 		case $1 in
+			--count=*)
+				i="${1:8}"
+
+				(( i )) || {
+					'builtin' 'printf' "fatal: count must be greater than or equal to 1\n"
+					return
+				}
+
+				shift
+				;;
 			help)
 				'command' 'git' random --help 2>/dev/null || 'command' 'man' ${source_dir}/man/man1/git-random.1
 				return
