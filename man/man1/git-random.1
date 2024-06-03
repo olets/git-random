@@ -3,7 +3,9 @@
 git-random \- build commit history quickly by creating and committing a randomly-named file.
 .SH SYNOPSIS
 
-\fBgit random\fR [(\fI\<count\>\fR | \fB--count=\fR\fI\<count\>\fR)] [(\fB--modify\fR | \fB--modify=\fR\fI\<refname\>\fR)]
+\fBgit random\fR [(\fI\<count\>\fR | \fB--count=\fR\fI\<count\>\fR)]
+    [(\fB--modify\fR | \fB--modify=\fR\fI\<refname\>\fR)]
+    [\fB--intermediary-commit=\fR(\fItrue\fR | \fIfalse\fR)]
 
 \fBgit random\fR (\fBhelp\fR | \fB--help\fR)
 
@@ -13,25 +15,31 @@ git-random \- build commit history quickly by creating and committing a randomly
 \fBgit-random\fR is a tool for helping with Git experiments.
 Build commit history quickly by creating and committing a randomly-named file.
 
-.SH Commands
+.SH COMMANDS
 The following commands are available:
 
 .IP \(bu
-\fBgit random\fR [(\fI\<count\>\fR | \fB--count=\fR\fI\<count\>\fR)] [(\fB--modify\fR | \fB--modify=\fR\fI\<refname\>\fR)]
+\fBgit random\fR [(\fI\<count\>\fR | \fB--count=\fR\fI\<count\>\fR)]
+    [(\fB--modify\fR | \fB--modify=\fR\fI\<refname\>\fR)]
+    [\fB--intermediary-commit=\fR(\fItrue\fR | \fIfalse\fR)]
 
-Choose a GUID. If no text file with that name exists, create one.
-Add the GUID to the text file as a new line.
-Commit the change. If there are already staged changes, stash them
-before committing, and reinstate them after committing.
+Appends a line of random content to a new .txt file, and commits the change.
+By default the file is a new one, named with the same random content.
 
-Use the \fB\count\fR option to create multiple commits in one run.
-For example,\`\fBgit random 2\fR\` or \`\fBgit random --count=2\fR\` will make two commits.
+Use the \fBcount\fR option to create multiple commits in one run.
+For example, \`\fBgit random 2\fR\` or \`\fBgit random --count=2\fR\` will make two commits.
 
 Use the \fBmodify\fR option to modify an existing commit.
-\`\fBgit random --modify\fR\` appends a GUID to the last file listed in
+\`\fBgit random --modify\fR\` appends a line of random content to the last file listed in
 \fIHEAD\fR's \fBgit log\fR. \`\fBgit random --modify=\fI\<refname\>\fR\`
-appends a GUID tothe last file listed in \fI\<refname\>\fR's \fBgit log\fR,
+appends a line of random content to the last file listed in \fI\<refname\>\fR's \fBgit log\fR,
 creating the file if necessary.
+
+By default, \fBgit-random\fR offloads the generation of random IDs to
+\fBgit-commit\fR. This increases the likelihood that IDs are unique per repo.
+But it leaves dangling commits (until Git's garbage collection removes them),
+and leaves noise in the reflog. To opt of this, pass the option
+\fB--intermediary-commit=false\fR. IDs will still be random. See also \fIConfig\fR.
 
 .IP \(bu
 \fBgit random\fR (\fBhelp\fR | \fB--help\fR)
@@ -42,6 +50,11 @@ Show this document.
 \fBgit random\fR (\fB--version\fR | \fB-v\fR)
 
 Show the current version.
+
+.SH CONFIGURATION
+
+Set \fBgit config random.intermediaryCommit\fR to \fItrue\FR or \fIfalse\fR
+to configure the \fB--intermediary-commit\fR default.
 
 .SH AUTHORS
 
