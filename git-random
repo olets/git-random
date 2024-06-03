@@ -14,10 +14,10 @@ __git_random_commit() {
 	# the `env LC_CTYPE=C` can be dropped on other systems
 	guid=$(env LC_CTYPE=C tr -dc '[:alnum:]' < /dev/urandom | dd bs=4 count=8 2>/dev/null)
 
-	if [[ -z "$guid" ]]; then
+	[[ -z "$guid" ]] && {
 		'builtin' 'printf' "git-random: Error generating random string. Exiting\n"
 		exit 1
-	fi
+	}
 
 	file_path="${guid}.txt"
 
@@ -68,21 +68,21 @@ __git_random_main() {
 		esac
 	done
 
-	if [[ -n "$*" ]]; then
+	[[ -n "$*" ]] && {
 		'builtin' 'printf' "Too many arguments\n"
 		return
-	fi
+	}
 
-	if (( "$i" < 1 )); then
+	(( "$i" < 1 )) && {
 		i=1
-	fi
+	}
 
-	if [[ -n $(git diff --cached --name-only) ]]; then
+	[[ -n $(git diff --cached --name-only) ]] && {
 		'builtin' 'printf' "git-random: stashing your staged changes.\n"
 		'command' 'git' stash --staged
 		'builtin' 'printf' "\n"
 		stash=1
-	fi
+	}
 
 	while (( "$i" > 0 )); do
 		__git_random_commit;
@@ -94,16 +94,16 @@ __git_random_main() {
 		(( i-- ))
 	done
 
-	if (( stash )); then
+	(( stash )) && {
 		'builtin' 'printf' "\ngit-random: applying stashed staged changes.\n"
 
 		'command' 'git' stash pop --index --quiet
 
-		if (( $? )); then
+		(( $? )) && {
 			'builtin' 'printf' "git-random: There was a problem applying stashed staged changes. They are in Git's stash{0}.\n"
 			return 1
-		fi
-	fi
+		}
+	}
 }
 
 __git_random_main $*
