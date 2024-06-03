@@ -7,12 +7,16 @@
 # Copyright (©) 2018-present Henry Bley-Vroman
 
 __git_random_commit() {
+	local commit_msg
 	local extension
-	local guid
+	local -i file_created=
 	local file_path
+	local guid
+	local log_msg
 	local revision
 	local refname
 
+	file_created=0
 	refname="$1"
 
 	# @TODO use git-commit to generate a _unique_ sha
@@ -40,15 +44,25 @@ __git_random_commit() {
 		file_path="$('command' 'git' log --oneline --name-only -1 "$revision" | tail -1)"
 	}
 
-	touch "$file_path"
+	[[ -f "$file_path" ]] || {
+		touch "$file_path" && file_created=1
+	}
 
 	'builtin' 'printf' "%s\n" "$guid" >> "$file_path"
 
 	'command' 'git' add "$file_path"
 
-	'builtin' 'printf' "git-random: Adding the line $guid to the file $file_path and committing the change.\n"
+	log_msg="git-random: Adding the line $guid to the "
+	(( file_created )) && log_msg+="new "
+	log_msg+="file $file_path and committing the change."
 
-	'command' 'git' commit -m "Random commit (${guid})"
+	commit_msg="Modified "
+	(( file_created )) && commit_msg="Created "
+	commit_msg+="the file $file_path"
+
+	'builtin' 'printf' "%s\n" "$log_msg"
+
+	'command' 'git' commit -m "$commit_msg"
 }
 
 __git_random_main() {
