@@ -1,3 +1,11 @@
+# [v1.1.0](https://github.com/olets/git-random/compare/v1.0.1...v1.1.0) (2024-06-03)
+
+### Features
+
+* **ci:** do not bump homebrew on github prereleases ([db2e826](https://github.com/olets/git-random/commit/db2e8266d622c7bee6438d097f304b5d44ff68ca))
+
+
+
 # [v1.0.1](https://github.com/olets/git-random/compare/v1.0.0...v1.0.1) (2024-01-11)
 
 - Polishes output ([b559a57](https://github.com/olets/git-random/commit/b559a57f1ef4b47f1bc69132542da4d1f46adfe6))
