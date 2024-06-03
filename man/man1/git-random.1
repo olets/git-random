@@ -3,7 +3,7 @@
 git-random \- build commit history quickly by creating and committing a randomly-named file.
 .SH SYNOPSIS
 
-\fBgit random\fR [(\fI\<count\>\fR | \fB--count=\fR\fI\<count\>\fR)]
+\fBgit random\fR [(\fI\<count\>\fR | \fB--count=\fR\fI\<count\>\fR)] [(\fB--modify\fR | \fB--modify=\fR\fI\<refname\>\fR)]
 
 \fBgit random\fR (\fBhelp\fR | \fB--help\fR)
 
@@ -17,16 +17,21 @@ Build commit history quickly by creating and committing a randomly-named file.
 The following commands are available:
 
 .IP \(bu
-\fBgit random\fR [(\fI\<count\>\fR | \fB--count=\fR\fI\<count\>\fR)]
+\fBgit random\fR [(\fI\<count\>\fR | \fB--count=\fR\fI\<count\>\fR)] [(\fB--modify\fR | \fB--modify=\fR\fI\<refname\>\fR)]
 
 Choose a GUID. If no text file with that name exists, create one.
 Add the GUID to the text file as a new line.
 Commit the change. If there are already staged changes, stash them
 before committing, and reinstate them after committing.
 
-The \fI\<count\>\fR option allows the creation of multiple commits
-with one command. Running \`\fBgit random 2\fR\` or
-\`\fBgit random --count=2\fR\` will make two commits.
+Use the \fB\count\fR option to create multiple commits in one run.
+For example,\`\fBgit random 2\fR\` or \`\fBgit random --count=2\fR\` will make two commits.
+
+Use the \fBmodify\fR option to modify an existing commit.
+\`\fBgit random --modify\fR\` appends a GUID to the last file listed in
+\fIHEAD\fR's \fBgit log\fR. \`\fBgit random --modify=\fI\<refname\>\fR\`
+appends a GUID tothe last file listed in \fI\<refname\>\fR's \fBgit log\fR,
+creating the file if necessary.
 
 .IP \(bu
 \fBgit random\fR (\fBhelp\fR | \fB--help\fR)

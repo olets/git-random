@@ -7,9 +7,15 @@
 # Copyright (©) 2018-present Henry Bley-Vroman
 
 __git_random_commit() {
+	local extension
 	local guid
 	local file_path
+	local revision
+	local refname
 
+	refname="$1"
+
+	# @TODO use git-commit to generate a _unique_ sha
 	# the following is BSD/Mac-friendly
 	# the `env LC_CTYPE=C` can be dropped on other systems
 	guid=$(env LC_CTYPE=C tr -dc '[:alnum:]' < /dev/urandom | dd bs=4 count=8 2>/dev/null)
@@ -20,6 +26,19 @@ __git_random_commit() {
 	}
 
 	file_path="${guid}.txt"
+
+	[[ -n "$refname" ]] && {
+		revision="$('command' 'git' rev-parse "$refname" 2>/dev/null)"
+		
+		(( "$?" )) && {
+			# Same error as `git rev-parse somebadsha --`
+			# This indirect approach necessary to support `--modify` and `--modify=*` patterns
+			'builtin' 'printf' "fatal: bad revision '%s'\n" "$refname"
+			return
+		}
+		
+		file_path="$('command' 'git' log --oneline --name-only -1 "$revision" | tail -1)"
+	}
 
 	touch "$file_path"
 
@@ -36,6 +55,7 @@ __git_random_main() {
 	local version="1.0.1"
 	
 	local -i i=
+	local refname
 	local -i stash=
 	local source_dir
 
@@ -56,6 +76,25 @@ __git_random_main() {
 			help)
 				'command' 'git' random --help 2>/dev/null || 'command' 'man' ${source_dir}/man/man1/git-random.1
 				return
+				;;
+			--modify)
+				# final "revision" declaration wins, same as e.g. `git commit --fixup=@ --fixup=@~`
+
+				refname="HEAD"
+				shift
+				;;
+			--modify=*)
+				# final "revision" declaration wins, same as e.g. `git commit --fixup=@ --fixup=@~`
+
+				refname="${1:9}"
+
+				(( "${#refname}" )) || {
+					# message based on that of `git commit --fixup=`
+					'builtin' 'printf' "fatal: could not look up revision\n"
+					return
+				}
+
+				shift
 				;;
 			--version|\
 			-v)
@@ -95,7 +134,7 @@ __git_random_main() {
 	}
 
 	while (( "$i" > 0 )); do
-		__git_random_commit;
+		__git_random_commit "$refname"
 
 		if (( "$i" > 1 )); then
 			'builtin' 'printf' "\n"
