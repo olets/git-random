@@ -58,7 +58,10 @@ __git_random_commit() {
 
 	commit_msg="Modified "
 	(( file_created )) && commit_msg="Created "
-	commit_msg+="the file $file_path"
+	commit_msg+="the file $file_path
+	
+Added the line
+$guid"
 
 	'builtin' 'printf' "%s\n" "$log_msg"
 
