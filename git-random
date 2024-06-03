@@ -95,12 +95,12 @@ __git_random_main() {
 	done
 
 	if (( stash )); then
-		'builtin' 'printf' "\ngit-random: reinstating stashed staged changes.\n"
+		'builtin' 'printf' "\ngit-random: applying stashed staged changes.\n"
 
 		'command' 'git' stash pop --index --quiet
 
 		if (( $? )); then
-			'builtin' 'printf' "git-random: There was a problem reinstating restoring your stashed changes. They are in Git's stash{0}.\n"
+			'builtin' 'printf' "git-random: There was a problem applying stashed staged changes. They are in Git's stash{0}.\n"
 			return 1
 		fi
 	fi
