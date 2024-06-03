@@ -2,13 +2,13 @@ name: Bump Homebrew Formula on Release Publication
 
 on:
   release:
-    types: [published]
+    types: [released]
 jobs:
   homebrew:
     name: Bump Homebrew formula
     runs-on: ubuntu-latest
     steps:
-      - uses: mislav/bump-homebrew-formula-action@v3
+      - uses: mislav/bump-homebrew-formula-action@b3327118b2153c82da63fd9cbf58942146ee99f0 # v3.1
         with:
           formula-name: git-random
           formula-path: git-random.rb
