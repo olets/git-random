@@ -5,18 +5,18 @@
 Say you want to try some Git commands on this scenario:
 
 ```
-• < • < •(A)
+a < b < c(branch-a)
   \
-    • < •(B)
+    d < e(branch-b)
 ```
 
 Get there with
 
 ```shell
-git switch -c A
-git random 2
-git switch -c B @~2
-git random 2
+git switch -c branch-a
+git random 2 # creates commits b and c
+git switch -c branch-b @~2
+git random 2 # creates commits d and e
 ```
 
 &nbsp;
@@ -66,59 +66,48 @@ Users of shells **other than zsh** may be able to install git-random as a plugin
 
 ## Usage
 
-### One commit
+### Create a random-content commit
 
 ```shell
 git random
 ```
 
-Example output (the final three lines are Git logging the results of the `git commit`)
+It is safe to have staged and unstaged changes before running `git random`. Staged changes will be automatically stashed and reapplied.
 
-```
-% git random
-git-random: Adding the line K94gQshXDNsx4ZZfSnDiE0ZftoCivFQ3 to the file K94gQshXDNsx4ZZfSnDiE0ZftoCivFQ3.txt and committing the change.
-[main 918f55b] Random commit (K94gQshXDNsx4ZZfSnDiE0ZftoCivFQ3)
- 1 file changed, 1 insertion(+)
- create mode 100644 K94gQshXDNsx4ZZfSnDiE0ZftoCivFQ3.txt
-
-%
-```
-
-It is safe to have staged changes before running `git random`
-
-```shell
-% git status
-On branch main
-nothing to commit, working tree clean
-
-% touch a-new-file
-
-% git add a-new-file
-
-% git random
-git-random: stashing your staged changes.
-Saved working directory and index state WIP on main: 55b918f Random commit (K94gQshXDNsx4ZZfSnDiE0ZftoCivFQ3)
-
-git-random: Adding the line K94gQshXDNsx4ZZfSnDiE0ZftoCivFQ3 to the file K94gQshXDNsx4ZZfSnDiE0ZftoCivFQ3.txt and committing the change.
-[main bf92f4b] Random commit (K94gQshXDNsx4ZZfSnDiE0ZftoCivFQ3)
- 1 file changed, 1 insertion(+)
- create mode 100644 K94gQshXDNsx4ZZfSnDiE0ZftoCivFQ3.txt
-
-git-random: reinstating stashed staged changes.
-
-% git status
-On branch main
-Changes to be committed:
-  (use "git restore --staged <file>..." to unstage)
-	new file:   a-new-file
-
-%
-```
-
-### Multiple commits
+### Create multiple random-content commits
 
 ```shell
 git random <count> # e.g. `git random 3`
+```
+
+and
+
+```shell
+git random --count=<count> # e.g. `git random --count=3`
+```
+
+are equivalent to each other, and to running `git random` repeatedly.
+
+### Create a commit which modifies a file modified in another specified commit
+
+Especially useful for setting up conflict scenarios.
+
+To add a line of random content to the last file listed in `HEAD`'s `git-log`, run
+
+```shell
+git random --modify
+```
+
+To add a line of random content to the last file listed in `refname`'s `git-log`, run
+
+```shell
+git random --modify=<refname>
+# e.g. `git random --modify=HEAD`
+# or `git random --modify=@~`
+# or `git random --modify=my-branch`
+# or `git random --modify=my-tag`
+# or `git random --modify=mysha`
+# etc.
 ```
 
 ### Show the manpage
@@ -133,7 +122,7 @@ git random (help | --help)
 git random (--version | -v)
 ```
 
-## Example
+## Examples
 
 I keep a dedicated Git repo for experiments and demos
 
@@ -148,47 +137,130 @@ and switch to it as needed
 ```shell
 # "Does `git rebase --onto` without specifying a `<branch>` work the way I think does?"
 % cd ../gitscratchpad
-
-% git switch -c upstream
-
-% git random
-
-% git switch -c newbase
-
-% git random
-
-% git switch -
-
-% git random
-
-% git switch -c branch
-
-% git random
-
-% git log --graph --pretty=format:'%h -%d %s%n' --abbrev-commit --branches
-* 056196f - (HEAD -> branch) Random commit (GooICwudCQ8u9ViE9F2CgVD7af91xsFo)
-|
-* 7590c44 - (upstream) Random commit (P71Ju20c6lZBafQFjR5wzN10OpOAHxHS)
-|
-| * 6fe654b - (newbase) Random commit (EoQ4uX9bNlOcvIsdBV5ZTLLOMQOEGh17)
-|/
-|
-* d32c37f - Random commit (G38cUNWk9aToTZlIrxssNYP63KqqAnmC)
-
-% git rebase --onto newbase upstream
-
-% git log --graph --pretty=format:'%h -%d %s%n' --abbrev-commit --branches
-* 08a0a94 - (HEAD -> branch) Random commit (GooICwudCQ8u9ViE9F2CgVD7af91xsFo)
-|
-* 6fe654b - (newbase) Random commit (EoQ4uX9bNlOcvIsdBV5ZTLLOMQOEGh17)
-|
-| * 7590c44 - (upstream) Random commit (P71Ju20c6lZBafQFjR5wzN10OpOAHxHS)
-|/
-|
-* d32c37f -  Random commit (G38cUNWk9aToTZlIrxssNYP63KqqAnmC)
-# "Yes. Okay back to work"
-
+# hack hack hack
 % cd -
+```
+
+### Practice rebasing
+
+```shell
+# Build out the scenario
+# This is the part git-random simplifies
+% git switch -c upstream # https://git-scm.com/docs/git-switch#Documentation/git-switch.txt--cltnew-branchgt
+% git random
+% git switch -c newbase
+% git random
+% git switch -
+% git random
+% git switch -c branch
+% git random
+```
+
+That built this tree (visualized here with `git log --graph --pretty=format:'%h -%d %s%n' --abbrev-commit --branches`)
+
+```
+* 056196f - (HEAD -> branch) Created the file GooICwu….txt
+|
+* 7590c44 - (upstream) Created the file P71Ju20….txt
+|
+| * 6fe654b - (newbase) Created the file EoQ4uX9….txt
+|/
+|
+* d32c37f - Created the file G38cUNW….txt
+```
+
+Now rebase:
+
+```shell
+# Try the command
+% git rebase --onto newbase upstream
+```
+
+Now the tree is (visualized here with `git log --graph --pretty=format:'%h -%d %s%n' --abbrev-commit --branches`)
+
+```
+* 08a0a94 - (HEAD -> branch) Created the file GooICwu….txt
+|
+* 6fe654b - (newbase) Created the file EoQ4uX9….txt
+|
+| * 7590c44 - (upstream) Created the file P71Ju20….txt
+|/
+|
+* d32c37f -  Created the file G38cUNW….txt
+```
+
+### Practice conflict resolution
+
+```shell
+# Build out the scenario
+# This is the part git-random simplifies
+git switch -c conflict/a # https://git-scm.com/docs/git-switch#Documentation/git-switch.txt--cltnew-branchgt
+git random
+git random --modify
+git switch -c conflict/b
+git random
+git random --modify=@~ # https://git-scm.com/docs/gitrevisions#Documentation/gitrevisions.txt-emem,
+                       # https://git-scm.com/docs/gitrevisions#Documentation/gitrevisions.txt-emltrevgtltngtemegemHEADmaster3em
+```
+
+That built this tree (visualized here with `git log --graph --pretty=format:'%h -%d %s%n' --abbrev-commit --branches`)
+
+```
+* 9c55d65 - (HEAD -> conflict/b) Modified the file N4BEpKZ….txt (EfGWDRE…)
+|
+* d214fa7 - Created the file wDk1GHF….txt
+|
+| * 8b0bd3f - (conflict/a) Modified the file N4BEpKZ….txt (1jNs9nJ…)
+|/
+|
+* 5d3c77c - Created the file N4BEpKZ….txt
+```
+
+Notice that `conflict/a` and `conflict/b` both modified the txt file starting with N4BEpKZ.
+
+Now rebase.
+
+```shell
+# Try choosing "ours"
+% git switch -c conflict/b-pick-ours
+% git rebase conflict/a
+# snip
+CONFLICT (content): Merge conflict in N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
+# snip
+% git status
+# snip
+  both modified:   N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
+# snip
+% git checkout --ours -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt # https://git-scm.com/docs/git-checkout#Documentation/git-checkout.txt---ours
+% git add N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
+% git rebase --continue
+# snip
+
+# Try choosing "theirs"
+% git switch -c conflict/b-pick-theirs conflict/b # https://git-scm.com/docs/git-switch#Documentation/git-switch.txt-ltstart-pointgt
+% git rebase conflict/a
+# snip
+CONFLICT (content): Merge conflict in N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
+# snip
+% git status
+# snip
+  both modified:   N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
+# snip
+% git checkout --theirs -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt # https://git-scm.com/docs/git-checkout#Documentation/git-checkout.txt---theirs
+% git add N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
+% git rebase --continue
+# snip
+
+% git diff conflict/a..conflict/b -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
+-1jNs9nJ30JzQ8pS0SBJnuofMfw9xHYj7
++EfGWDREQ20sXj3oFZa4O2o2BOTRv33RI
+
+% git diff conflict/b..conflict/b-pick-ours -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
+-EfGWDREQ20sXj3oFZa4O2o2BOTRv33RI
++1jNs9nJ30JzQ8pS0SBJnuofMfw9xHYj7
+
+% git diff conflict/b..conflict/b-pick-theirs -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
+# no output
 ```
 
 ## Changelog
