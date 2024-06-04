@@ -15,10 +15,9 @@ __git_random_commit() {
 	local log_msg
 	local -i intermediary_commit_int=
 	local revision
-	local refname
 
 	file_created=0
-	refname="$1"
+	revision="$1"
 	intermediary_commit_int="$2"
 
 	(( intermediary_commit_int )) && {
@@ -42,18 +41,8 @@ __git_random_commit() {
 
 	file_path="${id}.txt"
 
-	[[ -n "$refname" ]] && {
-		revision="$('command' 'git' rev-parse "$refname" 2>/dev/null)"
-		
-		(( "$?" )) && {
-			# Same error as `git rev-parse somebadsha --`
-			# This indirect approach necessary to support `--modify` and `--modify=*` patterns
-			'builtin' 'printf' "fatal: bad revision '%s'\n" "$refname"
-			exit "10$?"
-		}
-		
+	[[ -n "$revision" ]] && \
 		file_path="$('command' 'git' log --oneline --name-only -1 "$revision" | tail -1)"
-	}
 
 	[[ -f "$file_path" ]] || {
 		touch "$file_path" && file_created=1
@@ -90,6 +79,7 @@ __git_random_main() {
 	local intermediary_commit
 	local -i intermediary_commit_int=
 	local refname
+	local revision
 	local -i stash=
 	local source_dir
 
@@ -172,6 +162,17 @@ __git_random_main() {
 				;;
 		esac
 	}
+	
+	[[ -n "$refname" ]] && {
+		revision="$('command' 'git' rev-parse "$refname" 2>/dev/null)"
+		
+		(( "$?" )) && {
+			# Same error as `git rev-parse somebadsha --`
+			# This indirect approach necessary to support `--modify` and `--modify=*` patterns
+			'builtin' 'printf' "fatal: bad revision '%s'\n" "$refname"
+			exit "10$?"
+		}
+	}
 
 	[[ -n "$*" ]] && {
 		'builtin' 'printf' "Too many arguments\n"
@@ -190,7 +191,7 @@ __git_random_main() {
 	}
 
 	while (( "$i" > 0 )); do
-		__git_random_commit "$refname" "$intermediary_commit_int"
+		__git_random_commit "$revision" "$intermediary_commit_int"
 
 		if (( "$i" > 1 )); then
 			'builtin' 'printf' "\n"

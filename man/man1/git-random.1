@@ -35,6 +35,8 @@ Use the \fBmodify\fR option to modify an existing commit.
 appends a line of random content to the last file listed in \fI\<refname\>\fR's \fBgit log\fR,
 creating the file if necessary.
 
+Combining \fBcount\fR and \fBmodify\fR will make multiple commits all modifying the same ref's version of the same file.
+
 By default, \fBgit-random\fR offloads the generation of random IDs to
 \fBgit-commit\fR. This increases the likelihood that IDs are unique per repo.
 But it leaves dangling commits (until Git's garbage collection removes them),
