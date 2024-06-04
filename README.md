@@ -165,9 +165,9 @@ and switch to it as needed
 
 ### Practice rebasing
 
+Build out the scenario. This is the part git-random simplifies.
+
 ```shell
-# Build out the scenario
-# This is the part git-random simplifies
 % git switch -c upstream # https://git-scm.com/docs/git-switch#Documentation/git-switch.txt--cltnew-branchgt
 % git random
 % git switch -c newbase
@@ -178,7 +178,7 @@ and switch to it as needed
 % git random
 ```
 
-That built this tree (visualized here with `git log --graph --pretty=format:'%h -%d %s%n' --abbrev-commit --branches`)
+That built this tree[^*]
 
 ```
 * 056196f - (HEAD -> branch) Created the file GooICwu….txt
@@ -198,7 +198,7 @@ Now rebase:
 % git rebase --onto newbase upstream
 ```
 
-Now the tree is (visualized here with `git log --graph --pretty=format:'%h -%d %s%n' --abbrev-commit --branches`)
+Now the tree is this[^*]
 
 ```
 * 08a0a94 - (HEAD -> branch) Created the file GooICwu….txt
@@ -213,9 +213,9 @@ Now the tree is (visualized here with `git log --graph --pretty=format:'%h -%d %
 
 ### Practice conflict resolution
 
+Build out the scenario. This is the part git-random simplifies.
+
 ```shell
-# Build out the scenario
-# This is the part git-random simplifies
 git switch -c conflict/a # https://git-scm.com/docs/git-switch#Documentation/git-switch.txt--cltnew-branchgt
 git random
 git random --modify
@@ -225,7 +225,7 @@ git random --modify=@~ # https://git-scm.com/docs/gitrevisions#Documentation/git
                        # https://git-scm.com/docs/gitrevisions#Documentation/gitrevisions.txt-emltrevgtltngtemegemHEADmaster3em
 ```
 
-That built this tree (visualized here with `git log --graph --pretty=format:'%h -%d %s%n' --abbrev-commit --branches`)
+That built this tree[^*]
 
 ```
 * 9c55d65 - (HEAD -> conflict/b) Modified the file N4BEpKZ….txt (EfGWDRE…)
@@ -243,7 +243,6 @@ Notice that `conflict/a` and `conflict/b` both modified the txt file starting wi
 Now rebase.
 
 ```shell
-# Try choosing "ours"
 % git switch -c conflict/b-pick-ours
 % git rebase conflict/a
 # snip
@@ -253,12 +252,20 @@ CONFLICT (content): Merge conflict in N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
 # snip
   both modified:   N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
 # snip
+```
+
+Try choosing "ours"
+
+```shell
 % git checkout --ours -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt # https://git-scm.com/docs/git-checkout#Documentation/git-checkout.txt---ours
 % git add N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
 % git rebase --continue
 # snip
+```
 
-# Try choosing "theirs"
+Try choosing "ours"
+
+```shell
 % git switch -c conflict/b-pick-theirs conflict/b # https://git-scm.com/docs/git-switch#Documentation/git-switch.txt-ltstart-pointgt
 % git rebase conflict/a
 # snip
@@ -272,7 +279,11 @@ CONFLICT (content): Merge conflict in N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
 % git add N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
 % git rebase --continue
 # snip
+```
 
+What's the difference?
+
+```shell
 % git diff conflict/a..conflict/b -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
 -1jNs9nJ30JzQ8pS0SBJnuofMfw9xHYj7
 +EfGWDREQ20sXj3oFZa4O2o2BOTRv33RI
@@ -321,3 +332,8 @@ Under the following terms
 - Ethics - You must abide by the ethical standards specified in the Hippocratic License 3 with Ecocide, Extractive Industries, US Tariff Act, Mass Surveillance, Military Activities, and Media modules.
 - Preserve terms — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
 - No additional restrictions — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
+
+[^*]: Tree visualization done with
+    ```shell
+    git log --graph --pretty=format:'%h -%d %s%n' --abbrev-commit --branches
+    ```
