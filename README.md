@@ -66,6 +66,14 @@ Users of shells **other than zsh** may be able to install git-random as a plugin
 
 ## Usage
 
+```shell
+git random [(\<count\> | --count=\<count\>)]
+    [(--modify | --modify=\<refname\>)]
+    [--intermediary-commit=(true | false)]
+git random (help | --help)
+git random (--version | -v)
+```
+
 ### Create a random-content commit
 
 ```shell
@@ -121,6 +129,20 @@ git random (help | --help)
 ```
 git random (--version | -v)
 ```
+
+## Options
+
+By default, `git-random` offloads generation of the random strings used in its file names and file content to `git-commit`. The implementation leaves dangling commits until Git's garbage collection removes them (by default, Git runs this automatically), and adds entries to the reflog.
+
+To opt of this, pass the option `--intermediary-commit=false`. IDs will still be random, though with a nominal higher chance of not being unique within the repo.
+
+You can make `--intermediary-commit=false` the default behavior by changing Git's `random.intermediaryCommit` config:
+
+```shell
+git config random.intermediaryCommit false
+```
+
+With that configuration change, you can still opt into the default behavior on a per-run basis by passing `--intermediary-commit=true`.
 
 ## Examples
 
