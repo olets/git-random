@@ -193,10 +193,9 @@ That built this tree[^*]
 * d32c37f - Created the file G38cUNW….txt
 ```
 
-Now rebase:
+Now try out the rebase:
 
 ```shell
-# Try the command
 % git rebase --onto newbase upstream
 ```
 
