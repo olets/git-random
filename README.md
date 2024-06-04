@@ -167,8 +167,10 @@ and switch to it as needed
 
 Build out the scenario. This is the part git-random simplifies.
 
+This example uses [`git switch -c <newbranch>`](https://git-scm.com/docs/git-switch#Documentation/git-switch.txt--cltnew-branchgt), [`git rebase --onto <newbase>`](https://git-scm.com/docs/git-diff#Documentation/git-diff.txt-emgitdiffemltoptionsgtltcommitgtltcommitgt--ltpathgt82308203-1), and [`git-rebase`'s `<upstream>`](https://git-scm.com/docs/git-rebase#Documentation/git-rebase.txt-ltupstreamgt).
+
 ```shell
-% git switch -c upstream # https://git-scm.com/docs/git-switch#Documentation/git-switch.txt--cltnew-branchgt
+% git switch -c upstream
 % git random
 % git switch -c newbase
 % git random
@@ -215,14 +217,15 @@ Now the tree is this[^*]
 
 Build out the scenario. This is the part git-random simplifies.
 
+This example uses [`git switch -c <newbranch>`](https://git-scm.com/docs/git-switch#Documentation/git-switch.txt--cltnew-branchgt), [`@`](https://git-scm.com/docs/gitrevisions#Documentation/gitrevisions.txt-emem), [`~`](https://git-scm.com/docs/gitrevisions#Documentation/gitrevisions.txt-emltrevgtltngtemegemHEADmaster3em), [`git checkout --ours`](https://git-scm.com/docs/git-checkout#Documentation/git-checkout.txt---ours), [`git switch -c <newbranch> <startpoint>`](https://git-scm.com/docs/git-switch#Documentation/git-switch.txt-ltstart-pointgt), [`git checkout --theirs`](https://git-scm.com/docs/git-checkout#Documentation/git-checkout.txt---theirs), and [`git diff <commit>...<commit>`](https://git-scm.com/docs/git-diff#Documentation/git-diff.txt-emgitdiffemltoptionsgtltcommitgtltcommitgt--ltpathgt82308203-1).
+
 ```shell
-git switch -c conflict/a # https://git-scm.com/docs/git-switch#Documentation/git-switch.txt--cltnew-branchgt
+git switch -c conflict/a
 git random
 git random --modify
 git switch -c conflict/b
 git random
-git random --modify=@~ # https://git-scm.com/docs/gitrevisions#Documentation/gitrevisions.txt-emem,
-                       # https://git-scm.com/docs/gitrevisions#Documentation/gitrevisions.txt-emltrevgtltngtemegemHEADmaster3em
+git random --modify=@~
 ```
 
 That built this tree[^*]
@@ -257,16 +260,16 @@ CONFLICT (content): Merge conflict in N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
 Try choosing "ours"
 
 ```shell
-% git checkout --ours -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt # https://git-scm.com/docs/git-checkout#Documentation/git-checkout.txt---ours
+% git checkout --ours -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
 % git add N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
 % git rebase --continue
 # snip
 ```
 
-Try choosing "ours"
+Try choosing "theirs"
 
 ```shell
-% git switch -c conflict/b-pick-theirs conflict/b # https://git-scm.com/docs/git-switch#Documentation/git-switch.txt-ltstart-pointgt
+% git switch -c conflict/b-pick-theirs conflict/b
 % git rebase conflict/a
 # snip
 CONFLICT (content): Merge conflict in N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
@@ -275,7 +278,7 @@ CONFLICT (content): Merge conflict in N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
 # snip
   both modified:   N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
 # snip
-% git checkout --theirs -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt # https://git-scm.com/docs/git-checkout#Documentation/git-checkout.txt---theirs
+% git checkout --theirs -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
 % git add N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
 % git rebase --continue
 # snip
