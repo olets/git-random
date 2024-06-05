@@ -146,22 +146,23 @@ With that configuration change, you can still opt into the default behavior on a
 
 ## Examples
 
-I keep a dedicated Git repo for experiments and demos
-
-```shell
-% git init gitscratchpad
-
-% git commit --allow-empty -m "initial (empty)"
-```
-
-and switch to it as needed
-
-```shell
-# "Does `git rebase --onto` without specifying a `<branch>` work the way I think does?"
-% cd ../gitscratchpad
-# hack hack hack
-% cd -
-```
+> [!TIP]
+> I keep a dedicated Git repo for experiments and demos
+> 
+> ```shell
+> % git init gitscratchpad
+> 
+> % git commit --allow-empty -m "initial (empty)"
+> ```
+> 
+> and switch to it as needed
+> 
+> ```shell
+> # "Does `git rebase --onto` without specifying a `<branch>` work the way I think does?"
+> % cd ../gitscratchpad
+> # hack hack hack
+> % cd -
+> ```
 
 ### Practice rebasing
 
