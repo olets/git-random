@@ -144,6 +144,12 @@ git config random.intermediaryCommit false
 
 With that configuration change, you can still opt into the default behavior on a per-run basis by passing `--intermediary-commit=true`.
 
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
 ## Examples
 
 > [!TIP]
@@ -460,6 +466,12 @@ For example, the [latest `git-rebase` documentation as of this writing](https://
     git merge --no-ff @{-1}~
     git merge --no-ff @{-1}
     ```
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
 
 ## Changelog
 
