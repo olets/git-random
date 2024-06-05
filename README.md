@@ -171,132 +171,89 @@ Build out the scenario. This is the part git-random simplifies.
 This example uses [`git switch -c <newbranch>`](https://git-scm.com/docs/git-switch#Documentation/git-switch.txt--cltnew-branchgt), [`git rebase --onto <newbase>`](https://git-scm.com/docs/git-diff#Documentation/git-diff.txt-emgitdiffemltoptionsgtltcommitgtltcommitgt--ltpathgt82308203-1), and [`git-rebase`'s `<upstream>`](https://git-scm.com/docs/git-rebase#Documentation/git-rebase.txt-ltupstreamgt).
 
 ```shell
-% git switch -c upstream
+% git switch main
 % git random
-% git switch -c newbase
+% git switch -c feature
 % git random
-% git switch -
-% git random
-% git switch -c branch
+% git switch main
 % git random
 ```
 
-That built this tree[^*]
+That built a tree with the same shape as this one [^*]
 
 ```
-* 056196f - (HEAD -> branch) Created the file GooICwu….txt
+* 056196f (HEAD -> main)
 |
-* 7590c44 - (upstream) Created the file P71Ju20….txt
-|
-| * 6fe654b - (newbase) Created the file EoQ4uX9….txt
+| * (feature)
 |/
 |
-* d32c37f - Created the file G38cUNW….txt
+*
 ```
 
 Now try out the rebase:
 
 ```shell
-% git rebase --onto newbase upstream
-```
-
-Now the tree is this[^*]
-
-```
-* 08a0a94 - (HEAD -> branch) Created the file GooICwu….txt
-|
-* 6fe654b - (newbase) Created the file EoQ4uX9….txt
-|
-| * 7590c44 - (upstream) Created the file P71Ju20….txt
-|/
-|
-* d32c37f -  Created the file G38cUNW….txt
+% git switch feature
+% git rebase main
 ```
 
 ### Practice conflict resolution
 
 Build out the scenario. This is the part git-random simplifies.
 
-This example uses [`git switch -c <newbranch>`](https://git-scm.com/docs/git-switch#Documentation/git-switch.txt--cltnew-branchgt), [`@`](https://git-scm.com/docs/gitrevisions#Documentation/gitrevisions.txt-emem), [`~`](https://git-scm.com/docs/gitrevisions#Documentation/gitrevisions.txt-emltrevgtltngtemegemHEADmaster3em), [`git checkout --ours`](https://git-scm.com/docs/git-checkout#Documentation/git-checkout.txt---ours), [`git switch -c <newbranch> <startpoint>`](https://git-scm.com/docs/git-switch#Documentation/git-switch.txt-ltstart-pointgt), [`git checkout --theirs`](https://git-scm.com/docs/git-checkout#Documentation/git-checkout.txt---theirs), and [`git diff <commit>...<commit>`](https://git-scm.com/docs/git-diff#Documentation/git-diff.txt-emgitdiffemltoptionsgtltcommitgtltcommitgt--ltpathgt82308203-1).
+This example uses [`git switch -c <newbranch>`](https://git-scm.com/docs/git-switch#Documentation/git-switch.txt--cltnew-branchgt), [`git checkout --ours`](https://git-scm.com/docs/git-checkout#Documentation/git-checkout.txt---ours), [`git switch -c <newbranch> <startpoint>`](https://git-scm.com/docs/git-switch#Documentation/git-switch.txt-ltstart-pointgt), [`git checkout --theirs`](https://git-scm.com/docs/git-checkout#Documentation/git-checkout.txt---theirs), and [`git diff <commit>...<commit>`](https://git-scm.com/docs/git-diff#Documentation/git-diff.txt-emgitdiffemltoptionsgtltcommitgtltcommitgt--ltpathgt82308203-1).
 
 ```shell
+git random
 git switch -c conflict/a
 git random
 git random --modify
-git switch -c conflict/b
+git switch -c conflict/b @~
 git random
-git random --modify=@~
+git random --modify=conflict/a
 ```
 
 That built this tree[^*]
 
 ```
-* 9c55d65 - (HEAD -> conflict/b) Modified the file N4BEpKZ….txt (EfGWDRE…)
+* (HEAD -> conflict/b) Modified the file N4BEpKZ….txt (EfGWDRE…)
 |
-* d214fa7 - Created the file wDk1GHF….txt
+* Created the file wDk1GHF….txt
 |
-| * 8b0bd3f - (conflict/a) Modified the file N4BEpKZ….txt (1jNs9nJ…)
+| * (conflict/a) Modified the file N4BEpKZ….txt (1jNs9nJ…)
 |/
 |
-* 5d3c77c - Created the file N4BEpKZ….txt
+* Created the file N4BEpKZ….txt
 ```
 
 Notice that `conflict/a` and `conflict/b` both modified the txt file starting with N4BEpKZ.
 
-Now rebase.
+If you try to rebase `conflict/b` with `conflict/a`
 
 ```shell
-% git switch -c conflict/b-pick-ours
 % git rebase conflict/a
-# snip
-CONFLICT (content): Merge conflict in N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
-# snip
-% git status
-# snip
-  both modified:   N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
-# snip
 ```
 
-Try choosing "ours"
+there will be a conflict. Try choosing "ours"
 
 ```shell
 % git checkout --ours -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
 % git add N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
 % git rebase --continue
-# snip
 ```
 
-Try choosing "theirs"
+or "theirs"
 
 ```shell
-% git switch -c conflict/b-pick-theirs conflict/b
-% git rebase conflict/a
-# snip
-CONFLICT (content): Merge conflict in N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
-# snip
-% git status
-# snip
-  both modified:   N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
-# snip
 % git checkout --theirs -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
 % git add N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
 % git rebase --continue
-# snip
 ```
 
-What's the difference?
+and check the difference
 
 ```shell
 % git diff conflict/a..conflict/b -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
--1jNs9nJ30JzQ8pS0SBJnuofMfw9xHYj7
-+EfGWDREQ20sXj3oFZa4O2o2BOTRv33RI
-
-% git diff conflict/b..conflict/b-pick-ours -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
--EfGWDREQ20sXj3oFZa4O2o2BOTRv33RI
-+1jNs9nJ30JzQ8pS0SBJnuofMfw9xHYj7
-
-% git diff conflict/b..conflict/b-pick-theirs -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
-# no output
 ```
 
 ## Changelog
@@ -336,7 +293,11 @@ Under the following terms
 - Preserve terms — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
 - No additional restrictions — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
 
-[^*]: Tree visualization done with
+[^*]: Tree visualizations with branch names only were generated with
     ```shell
-    git log --graph --pretty=format:'%h -%d %s%n' --abbrev-commit --branches
+    git log --graph --pretty=format:'%d' --branches
+    ```
+    Those with branch names and commit messages were generated with
+    ```shell
+    git log --graph --pretty=format:'%d %s' --branches
     ```
