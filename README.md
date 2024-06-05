@@ -314,7 +314,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
 
 ## Acknowledgments
 
-Inspired by seeing Lorna Jane Mitchell do something similar in her talk ["Advanced GIT for Developers"](https://www.youtube.com/watch?v=duqBHik7nRo). I realized much later that she was using Matthew J. McCullough's [generaterandomchanges](https://github.com/matthewmccullough/scripts/blob/master/generaterandomchanges).
+Inspired by seeing Lorna Jane Mitchell use Matthew J. McCullough's [generaterandomchanges](https://github.com/matthewmccullough/scripts/blob/master/generaterandomchanges) in her talk ["Advanced GIT for Developers"](https://www.youtube.com/watch?v=duqBHik7nRo).
 
 ## License
 
