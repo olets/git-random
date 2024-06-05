@@ -264,7 +264,7 @@ and check the difference
 
 ### Follow along with Git's documentation
 
-You can use `git-random` to quicly build out the scenarios in Git's documentation. Instead of only reading, try them out yourself.
+You can use `git-random` to quickly build out the scenarios in Git's documentation. Instead of only reading, try them out yourself.
 
 For example, the [latest `git-rebase` documentation as of this writing](https://git-scm.com/docs/git-rebase/2.45.2) presents the following scenarios:
 
@@ -440,7 +440,7 @@ For example, the [latest `git-rebase` documentation as of this writing](https://
     *   # added
     ```
 
-    To get there realistically and without shorthands,
+    To get there realistically,
 
     ```shell
     git switch main
