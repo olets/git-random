@@ -232,7 +232,7 @@ That built this tree[^*]
 * Created the file N4BEpKZ….txt
 ```
 
-Notice that `conflict/a` and `conflict/b` both modified the txt file starting with N4BEpKZ.
+Notice that `conflict/a` and `conflict/b` both modified the txt file the name of which starts with "N4BEpKZ".
 
 If you try to rebase `conflict/b` with `conflict/a`
 
