@@ -240,25 +240,7 @@ If you try to rebase `conflict/b` with `conflict/a`
 % git rebase conflict/a
 ```
 
-there will be a conflict. Try choosing "ours"
-
-```shell
-% git checkout --ours -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
-% git add N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
-% git rebase --continue
-```
-
-or "theirs"
-
-```shell
-% git checkout --theirs -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
-% git add N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
-% git rebase --continue
-```
-
-and check the difference
-
-```shell
+there will be a conflict.
 % git diff conflict/a..conflict/b -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
 ```
 
