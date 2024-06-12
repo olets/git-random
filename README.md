@@ -252,7 +252,7 @@ For example, the [latest `git-rebase` documentation as of this writing](https://
 
 1.
     ```
-              A---B---C topic
+              A---B---C topic*
             /
         D---E---F---G master
     ```
@@ -359,7 +359,7 @@ For example, the [latest `git-rebase` documentation as of this writing](https://
     ```
               X
                 \
-            A---M---B
+             A---M---B
             /
     ---o---O---P---Q
     ```
