@@ -241,8 +241,6 @@ If you try to rebase `conflict/b` with `conflict/a`
 ```
 
 there will be a conflict.
-% git diff conflict/a..conflict/b -- N4BEpKZ5lf4XpefeSocngTl4mYi4uwUA.txt
-```
 
 ### Follow along with Git's documentation
 
