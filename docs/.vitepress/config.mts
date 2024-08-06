@@ -164,9 +164,9 @@ export default defineConfig({
     },
   },
   srcExclude: ["vitepressignore"],
-  // sitemap: {
-  //   hostname: "https://git-random.olets.dev",
-  // },
+  sitemap: {
+    hostname: "https://git-random.olets.dev",
+  },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
 
