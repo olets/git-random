@@ -112,7 +112,8 @@ export default defineConfig({
       "script",
       {
         src: "https://cdn.usefathom.com/script.js",
-        "data-site": "KVOUORES",
+        "data-site": "JJWWGCAA",
+        "data-spa": "auto",
         defer: "true",
       },
     ],
