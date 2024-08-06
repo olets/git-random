@@ -151,6 +151,19 @@ h1 img {
   display: inline-block
 }
 
+body.has-scroll-bar.VPSidebarItem.is-link:focus-visible {
+  transform: translateY(0);
+}
+
+/**
+ * Fix Firefox glitch, where after clicking on
+ * a sidebar link the cursor is stuck on `default`
+ * until it stops hovering a link.
+ */
+.VPSidebarItem .items .VPSidebarItem.is-link {
+  margin-bottom: 1px;
+}
+
 /**
 * Customize default theme styling by overriding CSS variables:
 * https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css
