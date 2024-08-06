@@ -32,7 +32,7 @@ git random
 git random --modify=conflict/a
 ```
 
-That built this tree[^1]
+That built this tree [^1]
 
 ```
 * (HEAD -> conflict/b) Modified the file N4BEpKZ….txt (EfGWDRE…)
