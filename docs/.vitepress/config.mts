@@ -178,7 +178,7 @@ export default defineConfig({
 
     nav: [
       {
-        text: "Source, Contributing, Changelog, License",
+        text: "Source, Changelog, License",
         link: "https://github.com/olets/git-random/",
         target: "_self",
       },
