@@ -1,3 +1,7 @@
+---
+titleTemplate: :title # see also VitePress config
+---
+
 # git-random ![GitHub release (latest by date)](https://img.shields.io/github/v/release/olets/git-random) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/olets/git-random/latest)
 
 ![git-random splash card](/git-random-card.png)
