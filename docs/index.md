@@ -1,6 +1,6 @@
 # git-random ![GitHub release (latest by date)](https://img.shields.io/github/v/release/olets/git-random) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/olets/git-random/latest)
 
-**git-random**: build random-content Git trees quickly. An aid for learning and experimenting with Git.
+**git-random** is an aid for learning and experimenting with Git. Use it to build random-content Git trees quickly.
 
 Say you want to try some Git commands on this scenario:
 
