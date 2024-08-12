@@ -1,5 +1,7 @@
 import { defineConfig } from "vitepress";
 import markdownItFootnote from "markdown-it-footnote";
+import githubDarkHighContrastTheme from "./theme/github-dark-high-contrast.json" assert { type: "json" };
+import githubLightHighContrastTheme from "./theme/github-light-high-contrast.json" assert { type: "json" };
 
 const description = "An aid for learning and experimenting with Git.";
 const title = "git-random";
@@ -161,6 +163,10 @@ export default defineConfig({
     },
     config: (md) => {
       md.use(markdownItFootnote);
+    },
+    theme: {
+      light: githubLightHighContrastTheme,
+      dark: githubDarkHighContrastTheme,
     },
   },
   srcExclude: ["vitepressignore"],
