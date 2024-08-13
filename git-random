@@ -7,45 +7,125 @@
 # Copyright (©) 2018-present Henry Bley-Vroman
 
 __git_random_commit() {
-	local guid
+	local commit_msg
+	local extension
+	local -i file_created=
 	local file_path
+	local id
+	local log_msg
+	local -i intermediary_commit_int=
+	local revision
 
-	# the following is BSD/Mac-friendly
-	# the `env LC_CTYPE=C` can be dropped on other systems
-	guid=$(env LC_CTYPE=C tr -dc '[:alnum:]' < /dev/urandom | dd bs=4 count=8 2>/dev/null)
+	file_created=0
+	revision="$1"
+	intermediary_commit_int="$2"
 
-	if [[ -z "$guid" ]]; then
+	(( intermediary_commit_int )) && {
+		# Offload ID generation to Git's SHA algorithm.
+		# Even more likely to be unique to the repo.
+		# Leaves dangling commits (subject to garbage collection, but until then will clutter git-reflog)
+		id="$(git rev-parse HEAD)"
+		'command' 'git' commit --allow-empty --no-verify -m "git-random: temp child of $id" &>/dev/null
+		id="$(git rev-parse HEAD)$id"
+		git reset HEAD~ 1>/dev/null
+	} || {
+		# the following is BSD/Mac-friendly
+		# the `env LC_CTYPE=C` can be dropped on other systems
+		id=$(env LC_CTYPE=C tr -dc '[:alnum:]' < /dev/urandom | dd bs=4 count=8 2>/dev/null)
+	}
+
+	[[ -z "$id" ]] && {
 		'builtin' 'printf' "git-random: Error generating random string. Exiting\n"
-		exit 1
-	fi
+		exit 7
+	}
 
-	file_path="${guid}.txt"
+	file_path="${id}.txt"
 
-	touch "$file_path"
+	[[ -n "$revision" ]] && \
+		file_path="$('command' 'git' log --oneline --name-only -1 "$revision" | tail -1)"
 
-	'builtin' 'printf' "%s\n" "$guid" >> "$file_path"
+	[[ -f "$file_path" ]] || {
+		touch "$file_path" && file_created=1
+	}
+
+	'builtin' 'printf' "%s\n" "$id" >> "$file_path"
 
 	'command' 'git' add "$file_path"
 
-	'builtin' 'printf' "git-random: Adding the line $guid to the file $file_path and committing the change.\n"
+	log_msg="git-random: Adding the line $id to the "
+	(( file_created )) && {
+		log_msg+="new "
+	} || log_msg+="existing "
+	log_msg+="file $file_path, and committing the change."
 
-	'command' 'git' commit -m "Random commit (${guid})"
+	commit_msg="Created "
+	(( file_created )) || commit_msg="Modified "
+	commit_msg+="the file ${file_path:0:7}….txt "
+	(( file_created )) || commit_msg+="(${id:0:7}…)"
+	commit_msg+="
+
+Added the line
+$id"
+
+	'builtin' 'printf' "%s\n" "$log_msg"
+
+	'command' 'git' commit -m "$commit_msg"
 }
 
 __git_random_main() {
 	local version="1.0.1"
 	
 	local -i i=
+	local intermediary_commit
+	local -i intermediary_commit_int=
+	local refname
+	local revision
 	local -i stash=
 	local source_dir
 
+	intermediary_commit="$(git config random.intermediaryCommit)"
+	intermediary_commit_int=1
 	source_dir=$(dirname -- "${BASH_SOURCE[0]}")
 
 	while (( $# )); do
 		case $1 in
+			--count=*)
+				i="${1:8}"
+
+				(( i )) || {
+					'builtin' 'printf' "Not a valid <count>: %s\n" "$1"
+					return 1
+				}
+
+				shift
+				;;
 			help)
 				'command' 'git' random --help 2>/dev/null || 'command' 'man' ${source_dir}/man/man1/git-random.1
-				return
+				return 2
+				;;
+			--intermediary-commit=*)
+				intermediary_commit=${1:22}
+				shift
+				;;
+			--modify)
+				# final "revision" declaration wins, same as e.g. `git commit --fixup=@ --fixup=@~`
+
+				refname="HEAD"
+				shift
+				;;
+			--modify=*)
+				# final "revision" declaration wins, same as e.g. `git commit --fixup=@ --fixup=@~`
+
+				refname="${1:9}"
+
+				(( "${#refname}" )) || {
+					# message based on that of `git commit --fixup=`
+					'builtin' 'printf' "fatal: could not look up revision\n"
+					# code from `git rev-parse @@ --`
+					exit 128
+				}
+
+				shift
 				;;
 			--version|\
 			-v)
@@ -54,12 +134,12 @@ __git_random_main() {
 				;;
 			-*)
 				'builtin' 'printf' "Unsupported option %s\n" "$1"
-				return
+				return 3
 				;;
 			*[!0-9]*)
 				# not an integer
 				'builtin' 'printf' "Not a valid <count>: %s\n" "$1"
-				return
+				return 1
 				;;
 			*)
 				i="$1"
@@ -68,24 +148,50 @@ __git_random_main() {
 		esac
 	done
 
-	if [[ -n "$*" ]]; then
+	[[ -n "$intermediary_commit" ]] && {
+		case $intermediary_commit in
+			false)
+				intermediary_commit_int=0
+				;;
+			true)
+				intermediary_commit_int=1
+				;;
+			*)
+				'builtin' 'printf' "Unsupported intermediary-commit value '%s'\n" "$intermediary_commit"
+				return 4
+				;;
+		esac
+	}
+	
+	[[ -n "$refname" ]] && {
+		revision="$('command' 'git' rev-parse "$refname" 2>/dev/null)"
+		
+		(( "$?" )) && {
+			# Same error as `git rev-parse somebadsha --`
+			# This indirect approach necessary to support `--modify` and `--modify=*` patterns
+			'builtin' 'printf' "fatal: bad revision '%s'\n" "$refname"
+			exit "10$?"
+		}
+	}
+
+	[[ -n "$*" ]] && {
 		'builtin' 'printf' "Too many arguments\n"
-		return
-	fi
+		return 5
+	}
 
-	if (( "$i" < 1 )); then
+	(( "$i" < 1 )) && {
 		i=1
-	fi
+	}
 
-	if [[ -n $(git diff --cached --name-only) ]]; then
+	[[ -n $(git diff --cached --name-only) ]] && {
 		'builtin' 'printf' "git-random: stashing your staged changes.\n"
 		'command' 'git' stash --staged
 		'builtin' 'printf' "\n"
 		stash=1
-	fi
+	}
 
 	while (( "$i" > 0 )); do
-		__git_random_commit;
+		__git_random_commit "$revision" "$intermediary_commit_int"
 
 		if (( "$i" > 1 )); then
 			'builtin' 'printf' "\n"
@@ -94,16 +200,16 @@ __git_random_main() {
 		(( i-- ))
 	done
 
-	if (( stash )); then
+	(( stash )) && {
 		'builtin' 'printf' "\ngit-random: applying stashed staged changes.\n"
 
 		'command' 'git' stash pop --index --quiet
 
-		if (( $? )); then
+		(( $? )) && {
 			'builtin' 'printf' "git-random: There was a problem applying stashed staged changes. They are in Git's stash{0}.\n"
-			return 1
-		fi
-	fi
+			return 6
+		}
+	}
 }
 
 __git_random_main $*
