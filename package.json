@@ -1,9 +1,10 @@
 {
   "name": "git-random",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "packageManager": "bun@1.1.21",
   "type": "module",
   "scripts": {
+    "changelog": "conventional-changelog -i CHANGELOG.md -s -p angular",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
@@ -21,6 +22,7 @@
   "devDependencies": {
     "@olets/tailwindcss-fluid-font-size": "npm:@jsr/olets__tailwindcss-fluid-font-size",
     "@types/bun": "latest",
+    "conventional-changelog": "^6.0.0",
     "markdown-it-footnote": "^4.0.0",
     "tailwindcss": "^3.4.7",
     "vitepress": "^1.3.1"
