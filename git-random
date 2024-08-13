@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # git-random
-# v1.1.0
-# June 3 2024
+# v2.0.0
+# August 12 2024
 # https://github.com/olets/git-random
 # Copyright (©) 2018-present Henry Bley-Vroman
 
@@ -73,7 +73,7 @@ $id"
 }
 
 __git_random_main() {
-	local version="1.0.1"
+	local version="2.0.0"
 	
 	local -i i=
 	local intermediary_commit
