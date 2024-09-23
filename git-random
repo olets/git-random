@@ -45,7 +45,7 @@ __git_random_commit() {
 		file_path="$('command' 'git' log --oneline --name-only -1 "$revision" | tail -1)"
 
 	[[ -f "$file_path" ]] || {
-		touch "$file_path" && file_created=1
+		'command' 'touch' "$file_path" && file_created=1
 	}
 
 	'builtin' 'printf' "%s\n" "$id" >> "$file_path" || {
