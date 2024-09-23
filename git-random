@@ -48,9 +48,13 @@ __git_random_commit() {
 		touch "$file_path" && file_created=1
 	}
 
-	'builtin' 'printf' "%s\n" "$id" >> "$file_path"
+	'builtin' 'printf' "%s\n" "$id" >> "$file_path" || {
+		return 1
+	}
 
-	'command' 'git' add "$file_path"
+	'command' 'git' add "$file_path" || {
+		return 2
+	}
 
 	log_msg="git-random: Adding the line $id to the "
 	(( file_created )) && {
