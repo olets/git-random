@@ -10,6 +10,7 @@ __git_random_commit() {
 	local commit_msg
 	local extension
 	local -i file_created=
+	local file_dir
 	local file_path
 	local id
 	local log_msg
@@ -45,6 +46,12 @@ __git_random_commit() {
 		file_path="$('command' 'git' log --oneline --name-only -1 "$revision" | tail -1)"
 
 	[[ -f "$file_path" ]] || {
+		file_dir=$('command' 'dirname' "$file_path")
+
+		[[ -d "$file_dir" ]] || {
+			'command' 'mkdir' -p "$file_dir"
+		}
+
 		'command' 'touch' "$file_path" && file_created=1
 	}
 
