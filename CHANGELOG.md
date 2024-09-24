@@ -1,3 +1,22 @@
+## [2.0.1](https://github.com/olets/git-random/compare/v2.0.0...v2.0.1) (2024-09-23)
+
+
+### Bug Fixes
+
+* **commit:** create directory if it does not exist ([a0a4c1d](https://github.com/olets/git-random/commit/a0a4c1d5dcb108d1cc873bd369199efa10489acf))
+* **commit:** do not follow 'touch' alias ([bcbaac6](https://github.com/olets/git-random/commit/bcbaac6c96bbd7762f39ea68ba3405439419b7a7))
+* **commit:** no success logs if not successful ([3215644](https://github.com/olets/git-random/commit/32156448e991c9b5f4b6c23360f4eeb61dc82839))
+
+
+### Features
+
+#### Docs
+
+* **codeblocks:** use the high-contrast themes shipped with shiki ([1a31d5d](https://github.com/olets/git-random/commit/1a31d5d920dbd9fe050f60f963bf0ef1ae57f71b))
+* **vitepress:** upgrade to 1.3.3 ([8c9841e](https://github.com/olets/git-random/commit/8c9841e85f7af8bd2a0acc2958bbd0e5fdaafb38))
+
+
+
 # [2.0.0](https://github.com/olets/git-random/compare/v1.1.0...v2.0.0) (2024-08-12)
 
 1. The Git message header names the created file, abbreviated. The full file name is given in the Git message body.
