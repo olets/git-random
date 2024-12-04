@@ -1,8 +1,26 @@
 import { defineConfig } from "vitepress";
+import { createTitle } from "vitepress/dist/client/shared.js";
 import markdownItFootnote from "markdown-it-footnote";
 
-const description = "An aid for learning and experimenting with Git.";
-const title = "git-random";
+const DESCRIPTION = "An aid for learning and experimenting with Git.";
+const FALLBACK_META_IMAGE = "git-random-card.png";
+const TITLE = "git-random";
+const ORIGIN = "https://git-random.olets.dev";
+
+function href(path = "") {
+  // https://github.com/vuejs/vitepress/blob/452d6c77a6afa43faa245452e7d0b360e55a36fb/src/shared/shared.ts#L21-L22
+  const HASH_OR_QUERY_RE = /[?#].*$/;
+  const INDEX_OR_EXT_RE = /(?:(^|\/)index)?\.(?:md|html)$/;
+
+  // https://github.com/vuejs/vitepress/blob/452d6c77a6afa43faa245452e7d0b360e55a36fb/src/shared/shared.ts#L65-L69
+  function normalize(path) {
+    return decodeURI(path)
+      .replace(HASH_OR_QUERY_RE, "")
+      .replace(INDEX_OR_EXT_RE, "$1");
+  }
+
+  return new URL(normalize(path), ORIGIN).href;
+}
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -64,48 +82,11 @@ export default defineConfig({
     ],
 
     // social metas
-    ["meta", { property: "og:title", content: "git-random" }],
-    [
-      "meta",
-      {
-        property: "og:description",
-        content: description,
-      },
-    ],
-    [
-      "meta",
-      {
-        property: "og:url",
-        content: "https://git-random.olets.dev/",
-      },
-    ],
     ["meta", { property: "og:site_name", content: "git-random" }],
     ["meta", { property: "og:type", content: "website" }],
-    [
-      "meta",
-      {
-        property: "og:image",
-        content: "https://git-random.olets.dev/git-random-card.png",
-      },
-    ],
     ["meta", { property: "og:image:width", content: "1200" }],
     ["meta", { property: "og:image:height", content: "630" }],
-    ["meta", { name: "twitter:title", content: "git-random" }],
     ["meta", { name: "twitter:card", content: "summary_large_image" }],
-    [
-      "meta",
-      {
-        name: "twitter:description",
-        content: description,
-      },
-    ],
-    [
-      "meta",
-      {
-        name: "twitter:image",
-        content: "https://git-random.olets.dev/git-random-card.png",
-      },
-    ],
 
     // Analytics
     [
@@ -148,10 +129,87 @@ export default defineConfig({
       },
     ],
   ],
-  title: title,
-  description: description,
+  transformPageData(pageData, ctx) {
+    let pageDescription = pageData.frontmatter?.description;
+    const pageHref = href(pageData.relativePath);
+    const pageImage = href(
+      pageData.frontmatter?.metaImage ?? FALLBACK_META_IMAGE
+    );
+    const pageTitle = createTitle(ctx.siteConfig.site, pageData);
+
+    if (!pageDescription) {
+      pageDescription = ctx.siteConfig.site?.description;
+
+      if (pageHref !== href()) {
+        pageDescription = [ctx.siteConfig.site?.title, pageDescription]
+          .filter((v) => Boolean(v))
+          .join(": ");
+      }
+    }
+
+    pageData.frontmatter.head ??= [];
+
+    pageData.frontmatter.head.push(
+      [
+        "meta",
+        {
+          property: "og:image",
+          content: pageImage,
+        },
+      ],
+      [
+        "meta",
+        {
+          name: "og:title",
+          content: pageTitle,
+        },
+      ],
+      [
+        "meta",
+        {
+          property: "og:url",
+          content: pageHref,
+        },
+      ],
+      [
+        "meta",
+        {
+          name: "twitter:image",
+          content: pageImage,
+        },
+      ],
+      [
+        "meta",
+        {
+          name: "twitter:title",
+          content: pageTitle,
+        },
+      ]
+    );
+
+    if (pageDescription) {
+      pageData.frontmatter.head.push(
+        [
+          "meta",
+          {
+            name: "og:description",
+            content: pageDescription,
+          },
+        ],
+        [
+          "meta",
+          {
+            name: "twitter:description",
+            content: pageDescription,
+          },
+        ]
+      );
+    }
+  },
+  title: TITLE,
+  description: DESCRIPTION,
   // https://vitepress.dev/reference/site-config#titletemplate
-  titleTemplate: `:title :: ${title}`, // to change delimiter from default pipe to play nice with Fathom event id format. see also homepage frontmatter
+  titleTemplate: `:title :: ${TITLE}`, // to change delimiter from default pipe to play nice with Fathom event id format. see also homepage frontmatter
   // https://vitepress.dev/reference/default-theme-last-updated
   lastUpdated: true,
   markdown: {
@@ -169,7 +227,7 @@ export default defineConfig({
   },
   srcExclude: ["vitepressignore"],
   sitemap: {
-    hostname: "https://git-random.olets.dev",
+    hostname: href(),
   },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
