@@ -2,8 +2,8 @@
 # Usage
 
 ```shell
-git random [(\<count\> | --count=\<count\>)]
-    [(--modify | --modify=\<refname\>)]
+git random [(<count> | --count=<count>)]
+    [(--modify | --modify=<refname>)]
     [--intermediary-commit=(true | false)]
 git random (help | --help)
 git random (--version | -v)
